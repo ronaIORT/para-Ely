@@ -78,9 +78,12 @@ body.opened .topbar{opacity:1}
   position:fixed; inset:0; z-index:100; background:var(--night);
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   gap:26px; padding:24px;
+  transition:opacity 1.1s ease, visibility 0s linear 0s;
+}
+.overlay.gone{
+  opacity:0; visibility:hidden; pointer-events:none;
   transition:opacity 1.1s ease, visibility 0s linear 1.1s;
 }
-.overlay.gone{opacity:0; visibility:hidden; pointer-events:none}
 .stars{position:absolute; inset:0; pointer-events:none}
 .star{position:absolute; background:#F1E8CE; border-radius:50%; animation:twinkle 3s ease-in-out infinite}
 @keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.9}}
@@ -328,9 +331,11 @@ body.opened .ltr{animation:rise .8s cubic-bezier(.2,.8,.25,1) forwards; animatio
 .flores-finales svg{width:64px; height:64px; transform-origin:50% 85%; animation:sway 6s ease-in-out infinite}
 .flores-finales svg:nth-child(2){width:88px; height:88px; animation-delay:.7s}
 .flores-finales svg:nth-child(3){animation-delay:1.3s}
-.titulo-final{font-family:'Fraunces',serif; font-weight:800; font-size:clamp(56px,17vw,120px); line-height:1; letter-spacing:-.02em}
+.titulo-final{font-family:'Fraunces',serif; font-weight:800; font-size:clamp(56px,17vw,120px); line-height:1; letter-spacing:-.02em; cursor:pointer; user-select:none; transition:transform .25s ease}
+.titulo-final:active{transform:scale(.97)}
 .titulo-final em{display:block; font-weight:300; font-style:italic; font-size:.55em; color:var(--red)}
-.firma-final{font-family:'Caveat',cursive; font-size:26px; color:var(--ink-soft); margin:26px 0 40px}
+.firma-final{font-family:'Caveat',cursive; font-size:26px; color:var(--ink-soft); margin:26px 0 40px; cursor:pointer; user-select:none; transition:transform .25s ease}
+.firma-final:active{transform:scale(.96)}
 .final-actions{display:flex; flex-direction:column; align-items:center; gap:18px}
 .btn-celebrate{
   position:relative; overflow:hidden;
@@ -389,7 +394,6 @@ body.opened .ltr{animation:rise .8s cubic-bezier(.2,.8,.25,1) forwards; animatio
     <circle cx="6.6" cy="18" r="2.4" fill="currentColor" stroke="none"/>
     <circle cx="16.6" cy="16" r="2.4" fill="currentColor" stroke="none"/>
     <path class="arcs" d="M21.5 9.5a4.5 4.5 0 0 1 0 5"/>
-    <path class="arcs" d="M20 12h.01" stroke-width="0"/>
     <line class="slash" x1="3.5" y1="3.5" x2="21" y2="21"/>
   </svg>
 </button>
@@ -427,7 +431,7 @@ body.opened .ltr{animation:rise .8s cubic-bezier(.2,.8,.25,1) forwards; animatio
       <div class="sec-head" data-reveal><span class="kicker">01 — La carta</span><span class="num">leer con calma</span></div>
       <div class="papel" data-reveal style="--d:.1s">
         <p class="saludo">Ely:</p>
-        <p class="capitular">Hola como estas? ... queria dedicarte algunas palabras en este dia especial para
+        <p class="capitular">Hola, ¿cómo estás? ... quería dedicarte algunas palabras en este día especial para
             todas las mujeres.</p>
         <p>No necesito conocerte en persona para saber que mereces un día completo. No por lo que haces, sino por cómo eres cuando escribes, cuando preguntas, cuando apareces. Eso ya es raro. Eso ya es valioso.</p>
         <p>Hoy, 11 de octubre, Día de la Mujer Boliviana, este pequeño rincón de internet es tuyo. Explóralo sin apuro: tiene música, tiene historia y tiene un jardín que solo florece si lo tocas.</p>
@@ -493,7 +497,7 @@ body.opened .ltr{animation:rise .8s cubic-bezier(.2,.8,.25,1) forwards; animatio
       <div class="bed" id="bed" data-reveal style="--d:.25s"></div>
       <div class="jardin-listo" id="jardinListo">
         <p>El jardín floreció completo.</p>
-        <p>— Como túuuu...incluso cuando las cosas se ponen dificiles.</p>
+        <p>— Como tú, incluso cuando las cosas se ponen difíciles.</p>
       </div>
     </div>
   </section>
@@ -538,8 +542,8 @@ body.opened .ltr{animation:rise .8s cubic-bezier(.2,.8,.25,1) forwards; animatio
         <svg viewBox="-60 -60 120 120"><use href="#kantuta" style="--p1:#D99A2B;--p2:#B23A2E;--p3:#5B7B4C"/></svg>
         <svg viewBox="-60 -60 120 120"><use href="#kantuta" style="--p1:#B23A2E;--p2:#D99A2B;--p3:#5B7B4C"/></svg>
       </div>
-      <h2 class="titulo-final" data-reveal style="--d:.1s"><em>Feliz día,</em>Ely.</h2>
-      <p class="firma-final" data-reveal style="--d:.2s">— de un amigo de WhatsApp...</p>
+      <h2 class="titulo-final" data-reveal style="--d:.1s" id="tituloFinal"><em>Feliz día,</em>Ely.</h2>
+      <p class="firma-final" data-reveal style="--d:.2s" id="firmaFinal">— de un amigo de WhatsApp...</p>
       <div class="final-actions" data-reveal style="--d:.3s">
         <button class="btn-celebrate" id="celebrateBtn" type="button">
           <span>¡Feliz día, Ely!</span>
@@ -563,7 +567,7 @@ body.opened .ltr{animation:rise .8s cubic-bezier(.2,.8,.25,1) forwards; animatio
         <svg class="lm-flor" viewBox="-60 -60 120 120" aria-hidden="true"><use href="#kantuta" style="--p1:#B23A2E;--p2:#D99A2B;--p3:#5B7B4C"/></svg>
         <h3>Para Ely</h3>
         <p>Feliz Día de la Mujer Boliviana</p>
-        <span class="lm-fecha">11 de octubre · de un desconocido</span>
+        <span class="lm-fecha">11 de octubre · de un amigo</span>
       </div>
       <div class="env-front"></div>
       <div class="flap"></div>
@@ -701,7 +705,7 @@ soundBtn.addEventListener('click', () => {
   const m = !soundBtn.classList.contains('muted');
   soundBtn.classList.toggle('muted', m);
   soundBtn.setAttribute('aria-pressed', String(m));
-  Music.setMuted(!m);
+  Music.setMuted(m);
 });
 
 /* ---------- pétalos que caen (canvas) ---------- */
@@ -809,7 +813,7 @@ function openEnvelope(){
 envelope.addEventListener('click', openEnvelope);
 envelope.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openEnvelope(); } });
 
-/* volver a armar el sobre desde el final */
+/* volver a armar el sobre desde el final (reinicia jardín y chat) */
 $('#againBtn').addEventListener('click', () => {
   opened = false;
   envelope.classList.add('no-anim');
@@ -819,6 +823,8 @@ $('#againBtn').addEventListener('click', () => {
   overlay.classList.remove('gone');
   document.body.classList.add('locked');
   document.body.classList.remove('opened');
+  resetChat();
+  resetGarden();
   scrollTo(0, 0);
 });
 
@@ -842,6 +848,7 @@ const CHAT = [
 ];
 const chatBody = $('#chatBody');
 let chatStarted = false;
+let chatObserver = null;
 const wait = ms => new Promise(r => setTimeout(r, ms));
 
 async function runChat(){
@@ -861,9 +868,21 @@ async function runChat(){
     await wait(650);
   }
 }
-new IntersectionObserver((es, obs) => es.forEach(e => {
-  if (e.isIntersecting && !chatStarted){ runChat(); obs.disconnect(); }
-}), { threshold: .35 }).observe($('#chatPanel'));
+
+function observeChat(){
+  if (chatObserver) chatObserver.disconnect();
+  chatObserver = new IntersectionObserver((es, obs) => es.forEach(e => {
+    if (e.isIntersecting && !chatStarted){ runChat(); obs.disconnect(); }
+  }), { threshold: .35 });
+  chatObserver.observe($('#chatPanel'));
+}
+observeChat();
+
+function resetChat(){
+  chatBody.innerHTML = '<div class="chat-fecha">Hoy · 11 de octubre</div>';
+  chatStarted = false;
+  observeChat();
+}
 
 /* ---------- el jardín de kantutas ---------- */
 const PETAL_PATH = "M0,4 C 13,-16 13,-46 0,-62 C -13,-46 -13,-16 0,4 Z";
@@ -882,6 +901,7 @@ const FLOWERS = [
 ];
 const bed = $('#bed');
 let bloomCount = 0;
+let bedObserver = null;
 
 FLOWERS.forEach((f, i) => {
   const H = f.h + 92, pal = PAL[i % 2], off = (i * 13) % 16 - 8, sc = .92 + (i % 3) * .08;
@@ -925,12 +945,28 @@ function bloom(plant){
 $('#florecerTodo').addEventListener('click', () => {
   document.querySelectorAll('.plant:not(.open)').forEach((p, i) => setTimeout(() => bloom(p), i * 280));
 });
-new IntersectionObserver((es, obs) => es.forEach(e => {
-  if (e.isIntersecting){ bed.classList.add('anim'); obs.disconnect(); }
-}), { threshold: .25 }).observe(bed);
+
+function observeBed(){
+  if (bedObserver) bedObserver.disconnect();
+  bedObserver = new IntersectionObserver((es, obs) => es.forEach(e => {
+    if (e.isIntersecting){ bed.classList.add('anim'); obs.disconnect(); }
+  }), { threshold: .25 });
+  bedObserver.observe(bed);
+}
+observeBed();
+
+function resetGarden(){
+  document.querySelectorAll('.plant').forEach(p => p.classList.remove('open'));
+  bloomCount = 0;
+  $('#jardinCuenta').textContent = '0 / 7 florecidas';
+  $('#jardinBarra').style.width = '0%';
+  $('#jardinListo').classList.remove('show');
+  bed.classList.remove('anim');
+  observeBed();
+}
 
 /* ============================================================
-   NUEVO: PIROPO AL AZAR  +  CONFETI DE PAPEL
+   PIROPO AL AZAR  +  CONFETI DE PAPEL
 ============================================================ */
 
 /* ---------- piropos al azar ---------- */
@@ -947,13 +983,15 @@ const PIROPOS = [
 const piropoText = $('#piropoText');
 const piropoBtn  = $('#piropoBtn');
 let lastPiropo = -1;
+let piropoTimer = null;
 piropoBtn.addEventListener('click', () => {
   let i;
   do { i = Math.floor(Math.random() * PIROPOS.length); }
   while (i === lastPiropo && PIROPOS.length > 1);
   lastPiropo = i;
+  clearTimeout(piropoTimer);
   piropoText.classList.add('fade');
-  setTimeout(() => {
+  piropoTimer = setTimeout(() => {
     piropoText.textContent = PIROPOS[i];
     piropoText.classList.remove('fade');
   }, 320);
@@ -986,16 +1024,13 @@ const Confetti = (() => {
   return { fire };
 })();
 
-/* ---------- botón "¡Feliz día, Ely!" ---------- */
-const celebrateBtn = $('#celebrateBtn');
+/* ---------- botón "¡Feliz día, Ely!" (sin bloqueo, se puede spamear) ---------- */
+const celebrateBtn  = $('#celebrateBtn');
 const celebrateSpan = celebrateBtn.querySelector('span');
 const ORIGINAL_TEXT = celebrateSpan.textContent;
-let celebrating = false;
+let celebrateTimers = [];
 
-celebrateBtn.addEventListener('click', () => {
-  if (celebrating) return;
-  celebrating = true;
-
+function fireCelebration(){
   Confetti.fire(120);
   if (!Music.muted) Music.chime();
   if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
@@ -1003,16 +1038,28 @@ celebrateBtn.addEventListener('click', () => {
   celebrateBtn.classList.add('done');
   celebrateSpan.textContent = '¡Que viva Bolivia! 🇧🇴';
 
-  setTimeout(() => {
-    celebrateSpan.textContent = 'Y que viva Ely 🌷';
-  }, 1400);
+  celebrateTimers.forEach(clearTimeout);
+  celebrateTimers = [
+    setTimeout(() => { celebrateSpan.textContent = 'Y que viva Ely 🌷'; }, 650),
+    setTimeout(() => {
+      celebrateSpan.textContent = ORIGINAL_TEXT;
+      celebrateBtn.classList.remove('done');
+    }, 1400)
+  ];
+}
+celebrateBtn.addEventListener('click', fireCelebration);
 
-  setTimeout(() => {
-    celebrateSpan.textContent = ORIGINAL_TEXT;
-    celebrateBtn.classList.remove('done');
-    celebrating = false;
-  }, 3000);
-});
+/* ---------- confeti al tocar el título y la firma finales ---------- */
+const tituloFinal = $('#tituloFinal');
+const firmaFinal  = $('#firmaFinal');
+
+function smallCelebration(){
+  Confetti.fire(70);
+  if (!Music.muted) Music.chime();
+  if (navigator.vibrate) navigator.vibrate([20, 40, 20]);
+}
+tituloFinal.addEventListener('click', smallCelebration);
+firmaFinal.addEventListener('click', smallCelebration);
 </script>
 </body>
 </html>
